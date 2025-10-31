@@ -1,0 +1,6 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "astronaut-tools",
+  "homepage": "https://<your-gh-username>.github.io/astronaut-tools/",
+  "items": [{ "name": "card", "type": "registry:component", "title": "Card" }]
+}
