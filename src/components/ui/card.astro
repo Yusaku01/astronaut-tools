@@ -1,0 +1,50 @@
+---
+interface Props {
+	title?: string;
+	as?: "article" | "section" | "div";
+	href?: string;
+	variant?: "elevated" | "flat";
+	tone?: "neutral" | "primary" | "success" | "danger";
+}
+
+const {
+	title,
+	as = "article",
+	href,
+	variant = "elevated",
+	tone = "neutral",
+} = Astro.props as Props;
+
+const isLink = typeof href === "string" && href.length > 0;
+const nonLinkTag: "article" | "section" | "div" = [
+	"article",
+	"section",
+	"div",
+].includes(as)
+	? as
+	: "article";
+
+const toneClass = `ui-card--tone ui-card--tone-${tone}`;
+const cls = `ui-card ui-card--${variant} ${toneClass}`;
+---
+{isLink ? (
+  <a class={cls} href={href} aria-label={title ? title : undefined}>
+    {title && <h3 class="ui-card__title">{title}</h3>}
+    <div class="ui-card__content"><slot /></div>
+  </a>
+) : nonLinkTag === 'article' ? (
+  <article class={cls} aria-label={title ? title : undefined}>
+    {title && <h3 class="ui-card__title">{title}</h3>}
+    <div class="ui-card__content"><slot /></div>
+  </article>
+) : nonLinkTag === 'section' ? (
+  <section class={cls} aria-label={title ? title : undefined}>
+    {title && <h3 class="ui-card__title">{title}</h3>}
+    <div class="ui-card__content"><slot /></div>
+  </section>
+) : (
+  <div class={cls} aria-label={title ? title : undefined}>
+    {title && <h3 class="ui-card__title">{title}</h3>}
+    <div class="ui-card__content"><slot /></div>
+  </div>
+)}

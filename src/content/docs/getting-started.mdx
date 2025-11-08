@@ -1,0 +1,34 @@
+---
+title: Getting Started
+description: セットアップと基本的な使い方
+---
+
+## セットアップ
+
+以下の開発ツールを導入してください。
+
+```
+pnpm add -D astro @astrojs/starlight @biomejs/biome lefthook vitest @types/node @playwright/test
+pnpm dlx playwright install
+pnpm run hooks:install
+```
+
+## スクリプト
+
+- 開発: `pnpm dev`
+- 型検査+ビルド: `pnpm build`
+- プレビュー: `pnpm preview`
+- Lint/Format: `pnpm lint` / `pnpm format`
+- 単体テスト: `pnpm test`
+- E2E: `pnpm test:e2e`（事前に `pnpm build`）
+
+## Docsでコンポーネントをプレビュー
+
+MDX内でコンポーネントをインポートし、`<Preview />`で表示できます。
+
+```mdx
+import Preview from "@/components/docs/Preview.astro";
+import Card from "@/components/ui/card.astro";
+
+<Preview title="Card" component={Card} src="components/ui/card.astro" />
+```

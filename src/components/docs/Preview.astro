@@ -1,0 +1,52 @@
+---
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+
+interface Props {
+	title?: string;
+	// Project-root relative like "components/ui/card.astro" or
+	// under src like "src/components/ui/button.astro".
+	src?: string;
+	// Optional: render a passed component if provided; otherwise render slot.
+	component?: any;
+	hydrate?: "visible" | "load" | "idle" | "none";
+}
+
+const { title, src, component: Cmp, hydrate = "none" } = Astro.props as Props;
+
+let code = "";
+if (src) {
+	const base = new URL("../../", import.meta.url);
+	const url = new URL(src, base);
+	try {
+		code = fs.readFileSync(fileURLToPath(url), "utf-8");
+	} catch (e) {
+		code = `/* Unable to load source: ${src} */`;
+	}
+}
+---
+<section class="preview-block">
+  {title && <h3 class="preview-title">{title}</h3>}
+  <div class="preview-frame">
+    {Cmp ? (hydrate === 'none' ? <Cmp /> : <Cmp client:{hydrate} />) : <slot />}
+  </div>
+  {code && (
+    <details class="preview-source">
+      <summary>Source</summary>
+      <pre><code class="language-astro">{code}</code></pre>
+    </details>
+  )}
+</section>
+
+<style>
+  .preview-block { margin: 1rem 0; padding: 1rem; border: 1px solid var(--sl-color-hairline, #e2e8f0); border-radius: 8px; }
+  .preview-title { margin: 0 0 .75rem; font-size: 1rem; }
+  .preview-frame { padding: .75rem; background: var(--sl-color-bg, transparent); border-radius: 6px; }
+  .preview-source summary { cursor: pointer; margin-top: .75rem; }
+  .preview-source pre { overflow: auto; background: var(--sl-color-bg-inline-code, #f8fafc); padding: .75rem; border-radius: 6px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .875rem; }
+  @media (prefers-color-scheme: dark) {
+    .preview-block { border-color: #334155; }
+    .preview-source pre { background: #0b1220; }
+  }
+</style>
