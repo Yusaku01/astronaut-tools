@@ -1,0 +1,21 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
+	"files": {
+		"includes": ["**/*.{js,jsx,ts,tsx,astro,css,html,json,jsonc,md}"],
+		"ignoreUnknown": false
+	},
+	"formatter": {
+		"enabled": true,
+		"lineEnding": "auto"
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"html": {
+		"linter": { "enabled": true },
+		"assist": { "enabled": true }
+	}
+}
