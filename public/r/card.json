@@ -1,0 +1,13 @@
+{
+	"name": "card",
+	"type": "registry:ui",
+	"title": "Card",
+	"description": "card component for Astro",
+	"files": [
+		{
+			"path": "src/components/ui/card.astro",
+			"type": "registry:component",
+			"content": "---\ninterface Props {\n  title?: string;\n  as?: 'article' | 'section' | 'div';\n  href?: string;\n  variant?: 'elevated' | 'flat';\n  tone?: 'neutral' | 'primary' | 'success' | 'danger';\n}\n\nconst {\n  title,\n  as = 'article',\n  href,\n  variant = 'elevated',\n  tone = 'neutral',\n} = Astro.props as Props;\n\nconst isLink = typeof href === 'string' && href.length > 0;\nconst nonLinkTag: 'article' | 'section' | 'div' = ['article', 'section', 'div'].includes(as)\n  ? as\n  : 'article';\n\nconst toneClass = `ui-card--tone ui-card--tone-${tone}`;\nconst cls = `ui-card ui-card--${variant} ${toneClass}`;\n---\n{isLink ? (\n  <a class={cls} href={href} aria-label={title ? title : undefined}>\n    {title && <h3 class=\"ui-card__title\">{title}</h3>}\n    <div class=\"ui-card__content\"><slot /></div>\n  </a>\n) : nonLinkTag === 'article' ? (\n  <article class={cls} aria-label={title ? title : undefined}>\n    {title && <h3 class=\"ui-card__title\">{title}</h3>}\n    <div class=\"ui-card__content\"><slot /></div>\n  </article>\n) : nonLinkTag === 'section' ? (\n  <section class={cls} aria-label={title ? title : undefined}>\n    {title && <h3 class=\"ui-card__title\">{title}</h3>}\n    <div class=\"ui-card__content\"><slot /></div>\n  </section>\n) : (\n  <div class={cls} aria-label={title ? title : undefined}>\n    {title && <h3 class=\"ui-card__title\">{title}</h3>}\n    <div class=\"ui-card__content\"><slot /></div>\n  </div>\n)}\n"
+		}
+	]
+}

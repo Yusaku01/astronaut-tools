@@ -8,7 +8,7 @@ interface Props {
 	// under src like "src/components/ui/button.astro".
 	src?: string;
 	// Optional: render a passed component if provided; otherwise render slot.
-	component?: any;
+	component?: unknown;
 	hydrate?: "visible" | "load" | "idle" | "none";
 }
 
@@ -20,7 +20,7 @@ if (src) {
 	const url = new URL(src, base);
 	try {
 		code = fs.readFileSync(fileURLToPath(url), "utf-8");
-	} catch (e) {
+	} catch {
 		code = `/* Unable to load source: ${src} */`;
 	}
 }

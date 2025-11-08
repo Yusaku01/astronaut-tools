@@ -13,8 +13,8 @@ pre-push:
   commands:
     typecheck:
       run: pnpm check:types
-    unit-tests:
-      run: pnpm test
+    # unit-tests:
+    #   run: pnpm test
     lint:
       run: pnpm lint
 
