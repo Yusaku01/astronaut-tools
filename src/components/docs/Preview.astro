@@ -1,6 +1,7 @@
 ---
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 
 interface Props {
 	title?: string;
@@ -8,7 +9,7 @@ interface Props {
 	// under src like "src/components/ui/button.astro".
 	src?: string;
 	// Optional: render a passed component if provided; otherwise render slot.
-	component?: unknown;
+	component?: AstroComponentFactory;
 	hydrate?: "visible" | "load" | "idle" | "none";
 }
 
