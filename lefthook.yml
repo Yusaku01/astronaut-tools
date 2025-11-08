@@ -1,0 +1,20 @@
+pre-commit:
+  parallel: true
+  commands:
+    biome-format:
+      glob: "*.{astro,ts,tsx,js,jsx,json,css,html,md}"
+      run: pnpm biome format --write {staged_files}
+      stage_fixed: true
+    biome-check:
+      glob: "*.{astro,ts,tsx,js,jsx}"
+      run: pnpm biome check {staged_files}
+
+pre-push:
+  commands:
+    typecheck:
+      run: pnpm check:types
+    unit-tests:
+      run: pnpm test
+    lint:
+      run: pnpm lint
+
