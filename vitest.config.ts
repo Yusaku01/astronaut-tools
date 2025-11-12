@@ -7,7 +7,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig(
 	getViteConfig({
 		test: {
-			environment: "jsdom",
+			environment: "happy-dom",
 			setupFiles: [],
 			globals: true,
 			include: ["**/*.{test,spec}.{js,ts,jsx,tsx}"],
