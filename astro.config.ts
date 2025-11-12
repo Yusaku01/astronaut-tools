@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 
 // Astro + Starlight configuration
 export default defineConfig({
+	site: "https://astronaut-tools.example",
 	integrations: [
 		starlight({
 			title: "Astronaut Tools",
@@ -10,6 +11,7 @@ export default defineConfig({
 			sidebar: [
 				{ label: "Introduction", link: "/" },
 				{ label: "Getting Started", link: "/getting-started/" },
+				{ label: "Components", autogenerate: { directory: "components" } },
 			],
 			// Optional: You can further customize Starlight here.
 		}),
