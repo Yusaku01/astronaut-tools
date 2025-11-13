@@ -1,5 +1,5 @@
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it } from "vitest";
-import { experimental_AstroContainer } from "astro/container";
 
 const baseProps = {
 	title: "Card Title",
@@ -9,7 +9,7 @@ const baseProps = {
 
 async function renderCard(overrides: Record<string, unknown> = {}) {
 	const mod = await import("./card.astro");
-	const container = await experimental_AstroContainer.create();
+	const container = await AstroContainer.create();
 	const html = await container.renderToString(mod.default, {
 		props: { ...baseProps, ...overrides },
 	});

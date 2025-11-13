@@ -13,8 +13,10 @@ interface Props {
 	hydrate?: "visible" | "load" | "idle" | "none";
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
 const { title, src, component: Cmp, hydrate = "none" } = Astro.props as Props;
 
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
 let code = "";
 if (src) {
 	const base = new URL("../../", import.meta.url);

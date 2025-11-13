@@ -1,5 +1,5 @@
+import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it } from "vitest";
-import { experimental_AstroContainer } from "astro/container";
 
 type Item = { label: string; value?: string; href?: string };
 
@@ -14,7 +14,7 @@ const baseProps = {
 async function renderSplit(overrides: Record<string, unknown> = {}) {
 	// Dynamic import so this file remains a draft even if the component isn't created yet.
 	const mod = await import("./split-button.astro");
-	const container = await experimental_AstroContainer.create();
+	const container = await AstroContainer.create();
 	const html = await container.renderToString(mod.default, {
 		props: { ...baseProps, ...overrides },
 	});

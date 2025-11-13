@@ -1,8 +1,27 @@
 ---
 title: Split Button
-description: Component documentation for the Split Button UI element in Astronaut Tools.
+description: プライマリアクションとドロップダウンを組み合わせたボタン
 ---
 
-## ダミーダミーダミー
+import Preview from "@/components/docs/Preview.astro";
+import SplitButton from "@/components/ui/split-button.astro";
 
-ダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミーダミー
+# Split Button
+
+プライマリーボタンと、追加アクションを開くトグルを並べたコンポーネントです。
+
+## プレビュー
+
+<Preview title="Split Button" src="components/ui/split-button.astro">
+  <SplitButton
+    label="Run"
+    items={[
+      { label: "Action A", value: "a" },
+      { label: "Action B", value: "b" },
+      { label: "Open docs", href: "/getting-started/" },
+    ]}
+  />
+</Preview>
+
+メニューはデフォルトで閉じています。右側のトグルをクリックすると開閉します。
+

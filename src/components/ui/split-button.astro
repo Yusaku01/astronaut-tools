@@ -1,5 +1,60 @@
 ---
+interface Item {
+	label: string;
+	value?: string;
+	href?: string;
+}
 
+interface Props {
+	label: string;
+	items: Item[];
+	id?: string;
+	class?: string;
+}
+
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
+const { label, items = [], id, class: className } = Astro.props as Props;
+const menuId = (
+	id ? `${id}-menu` : `split-menu-${Math.random().toString(36).slice(2)}`
+) as string;
 ---
 
+<div class={`ui-split-button${className ? ` ${className}` : ""}`} data-part="root">
+  <button type="button" data-part="primary">{label}</button>
 
+  <button
+    type="button"
+    data-part="toggle"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-controls={menuId}
+    onclick="
+      var expanded = this.getAttribute('aria-expanded') === 'true';
+      var newVal = expanded ? 'false' : 'true';
+      this.setAttribute('aria-expanded', newVal);
+      var menu = this.nextElementSibling;
+      if (menu && menu.getAttribute('role') === 'menu') {
+        menu.setAttribute('data-state', newVal === 'true' ? 'open' : 'closed');
+        if (newVal === 'true') { menu.removeAttribute('hidden'); }
+        else { menu.setAttribute('hidden', ''); }
+      }
+      return false;
+    "
+  >
+    ▾
+  </button>
+
+  <div id={menuId} role="menu" data-part="menu" data-state="closed" hidden>
+    <ul>
+      {items.map((item) => (
+        <li>
+          {item.href ? (
+            <a role="menuitem" href={item.href} data-value={item.value}>{item.label}</a>
+          ) : (
+            <button type="button" role="menuitem" data-value={item.value}>{item.label}</button>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
