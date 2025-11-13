@@ -2,6 +2,9 @@
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { codeToHtml } from "shiki";
+// biome-ignore lint/correctness/noUnusedImports: Used in template below
+import CopyButton from "@/components/ui/copy-button.astro";
 
 interface Props {
 	title?: string;
@@ -16,13 +19,33 @@ interface Props {
 // biome-ignore lint/correctness/noUnusedVariables: Used in template below
 const { title, src, component: Cmp, hydrate = "none" } = Astro.props as Props;
 
-// biome-ignore lint/correctness/noUnusedVariables: Used in template below
 let code = "";
+// biome-ignore lint/correctness/noUnusedVariables: Used in template below
+let highlightedCode = "";
+
 if (src) {
 	const base = new URL("../../", import.meta.url);
 	const url = new URL(src, base);
 	try {
 		code = fs.readFileSync(fileURLToPath(url), "utf-8");
+
+		// Shikiでシンタックスハイライト
+		highlightedCode = await codeToHtml(code, {
+			lang: "astro",
+			themes: {
+				light: "github-light",
+				dark: "github-dark",
+			},
+			defaultColor: false,
+			transformers: [
+				{
+					line(node) {
+						// 行番号を追加
+						node.properties["data-line"] = "";
+					},
+				},
+			],
+		});
 	} catch {
 		code = `/* Unable to load source: ${src} */`;
 	}
@@ -34,22 +57,116 @@ if (src) {
     {Cmp ? (hydrate === 'none' ? <Cmp /> : <Cmp client:{hydrate} />) : <slot />}
   </div>
   {code && (
-    <details class="preview-source">
-      <summary>Source</summary>
-      <pre><code class="language-astro">{code}</code></pre>
-    </details>
+    <div class="preview-source">
+      <div class="source-header">
+        <span class="source-label">Code</span>
+        <CopyButton code={code} />
+      </div>
+      <div class="source-code" set:html={highlightedCode} />
+    </div>
   )}
 </section>
 
 <style>
-  .preview-block { margin: 1rem 0; padding: 1rem; border: 1px solid var(--sl-color-hairline, #e2e8f0); border-radius: 8px; }
-  .preview-title { margin: 0 0 .75rem; font-size: 1rem; }
-  .preview-frame { padding: .75rem; background: var(--sl-color-bg, transparent); border-radius: 6px; }
-  .preview-source summary { cursor: pointer; margin-top: .75rem; }
-  .preview-source pre { overflow: auto; background: var(--sl-color-bg-inline-code, #f8fafc); padding: .75rem; border-radius: 6px; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .875rem; }
+  .preview-block {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid var(--sl-color-hairline, #e2e8f0);
+    border-radius: 8px;
+  }
+
+  .preview-title {
+    margin: 0 0 .75rem;
+    font-size: 1rem;
+  }
+
+  .preview-frame {
+    padding: .75rem;
+    background: var(--sl-color-bg, transparent);
+    border-radius: 6px;
+  }
+
+  .preview-source {
+    margin-top: 1rem;
+  }
+
+  .source-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--sl-color-bg-inline-code, #f8fafc);
+    border: 1px solid var(--sl-color-hairline, #e2e8f0);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .source-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sl-color-text, #0f172a);
+  }
+
+  .source-code {
+    overflow: auto;
+    border: 1px solid var(--sl-color-hairline, #e2e8f0);
+    border-radius: 0 0 6px 6px;
+  }
+
+  /* Shikiのデュアルテーマ対応 */
+  .source-code :global(pre) {
+    margin: 0;
+    padding: 1rem;
+    background: transparent !important;
+  }
+
+  .source-code :global(code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    counter-reset: line;
+  }
+
+  /* 行番号スタイル */
+  .source-code :global(code[data-line-numbers]) {
+    counter-reset: line;
+  }
+
+  .source-code :global(code[data-line-numbers] > [data-line]::before) {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 1rem;
+    margin-right: 1.5rem;
+    text-align: right;
+    color: var(--sl-color-text-accent, #94a3b8);
+  }
+
+  .source-code :global(.line) {
+    display: inline-block;
+    width: 100%;
+  }
+
   @media (prefers-color-scheme: dark) {
-    .preview-block { border-color: #334155; }
-    .preview-source pre { background: #0b1220; }
+    .preview-block {
+      border-color: #334155;
+    }
+
+    .source-header {
+      background: var(--sl-color-bg-inline-code, #1e293b);
+      border-color: #334155;
+    }
+
+    .source-label {
+      color: var(--sl-color-text, #f1f5f9);
+    }
+
+    .source-code {
+      border-color: #334155;
+    }
+
+    .source-code :global(code[data-line-numbers] > [data-line]::before) {
+      color: var(--sl-color-text-accent, #64748b);
+    }
   }
 </style>

@@ -49,3 +49,62 @@ const cls = `ui-card ui-card--${variant} ${toneClass}`;
     <div class="ui-card__content"><slot /></div>
   </div>
 )}
+
+<style>
+  .ui-card {
+    display: block;
+    background: var(--ui-bg);
+    color: var(--ui-fg);
+    border-radius: var(--ui-radius);
+    padding: calc(var(--ui-gap) * 1.25);
+    text-decoration: none;
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+  .ui-card--elevated {
+    box-shadow: var(--ui-shadow);
+    border: 1px solid transparent;
+  }
+  .ui-card--outline {
+    border: 1px solid var(--ui-border);
+  }
+  .ui-card:hover {
+    transform: translateY(-1px);
+  }
+  .ui-card__title {
+    margin: 0 0 calc(var(--ui-gap) * 0.8);
+    font:
+      600 1.05rem / 1.2 system-ui,
+      sans-serif;
+  }
+  .ui-card__content {
+    font:
+      400 0.95rem / 1.6 system-ui,
+      sans-serif;
+  }
+  /* tones → 上部にうっすら帯を出す */
+  .ui-card--tone::before {
+    content: "";
+    display: block;
+    height: 6px;
+    margin: -8px -8px 8px;
+    border-radius: 8px 8px 0 0;
+    opacity: 0.7;
+  }
+  .ui-card--tone-neutral::before {
+    background: var(--ui-neutral);
+  }
+  .ui-card--tone-info::before {
+    background: var(--ui-info);
+  }
+  .ui-card--tone-success::before {
+    background: var(--ui-success);
+  }
+  .ui-card--tone-warning::before {
+    background: var(--ui-warning);
+  }
+  .ui-card--tone-danger::before {
+    background: var(--ui-danger);
+  }
+</style>

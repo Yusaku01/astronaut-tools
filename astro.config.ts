@@ -8,6 +8,7 @@ export default defineConfig({
 		starlight({
 			title: "Astronaut Tools",
 			description: "Astro向けのUIコンポーネントと開発ツール集",
+			customCss: ["./styles/tokens.css"],
 			sidebar: [
 				{ label: "Introduction", link: "/" },
 				{ label: "Getting Started", link: "/getting-started/" },
